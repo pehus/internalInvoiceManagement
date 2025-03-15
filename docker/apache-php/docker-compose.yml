@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+    apache:
+        container_name: apache_iim
+        build:
+            dockerfile: Dockerfile
+            context: .
+        depends_on:
+            - database
+        volumes:
+          - ./../../.:/var/www/html/
+          #- ./docker/apache-php/apache-config.conf:/etc/apache2/sites-available/000-default.conf
+        ports:
+        - 80:80
+    database:
+        container_name: database_iim
+        image: mysql
+        restart: always
+        environment:
+          MYSQL_ROOT_PASSWORD: 123456  # Set the root password
+          MYSQL_DATABASE: iim  # Create a database
+          MYSQL_USER: pehus  # Create a user
+          MYSQL_PASSWORD: 123456  # Set the user's password
+        ports:
+          - "3306:3306"  # Map container port to host port (optional)
+        volumes:
+          - ./data:/var/lib/mysql  # Persist data to the host machine (optional)
