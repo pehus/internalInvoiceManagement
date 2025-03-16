@@ -98,7 +98,7 @@ final class InvoiceController extends AbstractController
 
             if ($invoiceDto->getItems() === null)
             {
-                throw new HttpException(Response::HTTP_BAD_REQUEST, "Missing invoiceItems");
+                throw new HttpException(Response::HTTP_BAD_REQUEST, "Missing items");
             }
 
             $invoiceStatusRepository = $em->getRepository(InvoiceStatus::class);

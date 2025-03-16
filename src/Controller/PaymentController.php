@@ -7,6 +7,7 @@ use App\Dto\PaymentDto;
 use App\Entity\Invoice;
 use App\Entity\Payment;
 use App\Entity\PaymentMethod;
+use App\Repository\InvoiceRepository;
 use App\Service\SerializerService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,6 +27,7 @@ final class PaymentController extends AbstractController
         int $invoiceId,
         Request $request,
         EntityManagerInterface $em,
+        InvoiceRepository $invoiceRepository,
         SerializerService $serializerService
     ): JsonResponse
     {
@@ -63,6 +65,8 @@ final class PaymentController extends AbstractController
             $payment->setInvoice($invoice);
             $payment->setAmount($paymentDto->getAmount());
             $payment->setDate(new DateTime());
+
+            $invoiceRepository->updateStatus($invoice);
 
             $em->persist($payment);
             $em->flush();

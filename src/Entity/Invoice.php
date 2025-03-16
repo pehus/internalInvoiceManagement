@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Enum\InvoiceStatusEnum;
+use App\Repository\InvoiceStatusRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -24,28 +26,19 @@ class Invoice
     private float $totalAmount = 0.0;
 
     #[ORM\ManyToOne(targetEntity: InvoiceStatus::class)]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: "status_id", referencedColumnName: "id", nullable: false)]
     private InvoiceStatus $status;
 
     #[ORM\OneToMany(mappedBy: 'invoice', targetEntity: Payment::class, cascade: ['persist', 'remove'])]
     private Collection $payments;
 
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $dueDate = null;
+
     public function __construct()
     {
         $this->items = new ArrayCollection();
         $this->payments = new ArrayCollection();
-    }
-
-    public function updateStatus(): static
-    {
-        $totalPaid = array_sum(array_map(fn(Payment $payment) => $payment->getAmount(), $this->payments->toArray()));
-
-        if ($totalPaid >= $this->totalAmount)
-        {
-            $this->status = new InvoiceStatus('zaplacená');
-        }
-
-        return $this;
     }
 
     public function getId(): int
@@ -116,6 +109,18 @@ class Invoice
     public function setPayments(Collection $payments): static
     {
         $this->payments = $payments;
+
+        return $this;
+    }
+
+    public function getDueDate(): ?\DateTimeInterface
+    {
+        return $this->dueDate;
+    }
+
+    public function setDueDate(?\DateTimeInterface $dueDate): static
+    {
+        $this->dueDate = $dueDate;
 
         return $this;
     }
