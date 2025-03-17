@@ -29,6 +29,12 @@ docker-compose up -d
 ## 🌐 4. Running the Application
 http://localhost/api/invoice
 
+
+install packages:
+```sh
+composer i
+```
+
 request get all invoices:
 ```
 GET: http://localhost/api/invoice

@@ -64,10 +64,13 @@ class InvoiceControllerTest extends WebTestCase
             ['HTTP_X-API-KEY' => 'your-secret-api-key']
         );
 
-        if ($client->getResponse()->getStatusCode() === Response::HTTP_OK) {
+        if ($client->getResponse()->getStatusCode() === Response::HTTP_OK)
+        {
             $this->assertResponseIsSuccessful();
             $this->assertJson($client->getResponse()->getContent());
-        } else {
+        }
+        else
+        {
             $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
         }
     }
