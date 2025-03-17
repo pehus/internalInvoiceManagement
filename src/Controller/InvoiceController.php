@@ -142,7 +142,10 @@ final class InvoiceController extends AbstractController
 
             $em->commit();
 
-            return new JsonResponse(['message' => 'OK'], Response::HTTP_OK);
+            return new JsonResponse([
+                'message' => 'OK',
+                'id' => $invoice->getId()
+            ], Response::HTTP_OK);
         }
         catch (Throwable $t)
         {
